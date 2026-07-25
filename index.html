@@ -406,6 +406,43 @@
             animation: wave 1s ease-in-out infinite;
             transform-origin: 70% 70%;
         }
+        /* NUEVO: Estilos para Retos Compartidos */
+        .reto-option {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            position: relative;
+        }
+        .reto-option:hover {
+            border-color: rgba(236, 72, 153, 0.4);
+            background: rgba(236, 72, 153, 0.05);
+            transform: translateY(-2px);
+        }
+        .reto-option.active {
+            border-color: #ec4899;
+            background: rgba(236, 72, 153, 0.15);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
+        }
+        .reto-check {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .reto-option.active .reto-check {
+            opacity: 1;
+        }
+        .discount-badge {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+        .reto-juntas-card {
+            transition: all 0.3s ease;
+        }
+        .reto-juntas-card:hover {
+            transform: translateY(-3px);
+            background: rgba(236, 72, 153, 0.1) !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-infit-pink selection:text-white">
@@ -526,6 +563,110 @@
         </div>
     </header>
 
+
+    <!-- SECCIÓN RETOS COMPARTIDOS -->
+    <section class="max-w-5xl mx-auto px-4 pb-16">
+        <div class="glass-panel rounded-3xl p-6 md:p-10 relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-infit-pink opacity-10 blur-[100px] rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500 opacity-10 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div class="text-center mb-8 relative">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-4">
+                    <i class="fas fa-users text-cyan-400"></i>
+                    <span class="text-cyan-300 text-xs font-bold uppercase tracking-widest">Retos Compartidos</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-heading font-bold uppercase italic mb-4 text-white">
+                    Comiencen el Cambio <span class="text-infit-pink">Juntas</span>
+                </h2>
+                <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-6">
+                    Invita a una amiga, hermana o compañera y comiencen el cambio juntas. Tener una compañera hace el proceso más fácil, divertido y constante.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto mb-6">
+                    <div class="reto-juntas-card bg-infit-pink/5 border border-infit-pink/20 rounded-xl p-4 text-center">
+                        <i class="fas fa-heart text-infit-pink text-xl mb-2"></i>
+                        <p class="text-infit-pink font-bold text-sm uppercase tracking-wider">Juntas se motivan</p>
+                    </div>
+                    <div class="reto-juntas-card bg-infit-pink/5 border border-infit-pink/20 rounded-xl p-4 text-center">
+                        <i class="fas fa-shoe-prints text-infit-pink text-xl mb-2"></i>
+                        <p class="text-infit-pink font-bold text-sm uppercase tracking-wider">Juntas avanzan</p>
+                    </div>
+                    <div class="reto-juntas-card bg-infit-pink/5 border border-infit-pink/20 rounded-xl p-4 text-center">
+                        <i class="fas fa-star text-infit-pink text-xl mb-2"></i>
+                        <p class="text-infit-pink font-bold text-sm uppercase tracking-wider">Juntas construyen su mejor versión</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 text-sm md:text-base max-w-2xl mx-auto">
+                    Además, contarán con una <strong class="text-white">herramienta digital</strong> para crear retos (premios y castigos) entre ustedes.
+                    <br>Porque cuando dos o más se comprometen, llegar a la meta es mucho más fácil.
+                </p>
+            </div>
+
+            <!-- Selector de participantes y descuentos -->
+            <div class="bg-gradient-to-br from-infit-pink/10 to-cyan-500/10 border border-white/10 rounded-2xl p-5 md:p-6">
+                <p class="text-center text-white font-bold text-sm uppercase mb-1">
+                    <i class="fas fa-tags text-infit-gold mr-1"></i> Entre más compañeras, más ahorro
+                </p>
+                <p class="text-center text-[10px] text-gray-500 mb-5">Selecciona cuántas van a participar y el descuento se aplica automáticamente</p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto" id="reto-selector">
+                    <button onclick="selectParticipantes(0)" class="reto-option active rounded-xl p-4 text-center" data-participants="0">
+                        <div class="absolute top-2 right-2 reto-check text-green-400"><i class="fas fa-check-circle"></i></div>
+                        <div class="text-3xl mb-2">👤</div>
+                        <p class="text-white font-bold text-xs uppercase">Yo sola</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Sin descuento</p>
+                    </button>
+                    <button onclick="selectParticipantes(2)" class="reto-option rounded-xl p-4 text-center" data-participants="2">
+                        <div class="absolute top-2 right-2 reto-check text-green-400"><i class="fas fa-check-circle"></i></div>
+                        <div class="text-3xl mb-2">👯‍♀️</div>
+                        <p class="text-white font-bold text-xs uppercase">2 Integrantes</p>
+                        <p class="text-[11px] text-infit-gold font-bold mt-1">10% descuento</p>
+                    </button>
+                    <button onclick="selectParticipantes(3)" class="reto-option rounded-xl p-4 text-center" data-participants="3">
+                        <div class="absolute top-2 right-2 reto-check text-green-400"><i class="fas fa-check-circle"></i></div>
+                        <div class="text-3xl mb-2">👭</div>
+                        <p class="text-white font-bold text-xs uppercase">3 Integrantes</p>
+                        <p class="text-[11px] text-infit-gold font-bold mt-1">15% descuento</p>
+                    </button>
+                    <button onclick="selectParticipantes(4)" class="reto-option rounded-xl p-4 text-center" data-participants="4">
+                        <div class="absolute top-2 right-2 reto-check text-green-400"><i class="fas fa-check-circle"></i></div>
+                        <div class="text-3xl mb-2">👩‍👩‍👧‍👦</div>
+                        <p class="text-white font-bold text-xs uppercase">4 Integrantes</p>
+                        <p class="text-[11px] text-infit-gold font-bold mt-1">20% descuento</p>
+                    </button>
+                </div>
+
+                <!-- Nota: precio por integrante (aparece solo cuando se elige reto) -->
+                <div id="reto-price-info-note" class="hidden mt-4 max-w-2xl mx-auto">
+                    <div class="bg-infit-pink/10 border border-infit-pink/30 rounded-lg px-4 py-2.5 flex items-center justify-center gap-2 text-center">
+                        <i class="fas fa-info-circle text-infit-pink"></i>
+                        <p class="text-infit-pink text-xs font-bold">
+                            El precio mostrado en cada plan es <u>por integrante</u> del reto. Cada una paga lo mismo y obtiene el descuento.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 max-w-3xl mx-auto">
+                    <div class="bg-cyan-900/10 border border-cyan-500/20 rounded-lg p-3 flex items-start gap-2">
+                        <i class="fas fa-mobile-screen text-cyan-400 mt-0.5"></i>
+                        <div>
+                            <p class="text-cyan-300 text-[11px] font-bold uppercase">Herramienta Digital Incluida</p>
+                            <p class="text-gray-400 text-[10px] mt-0.5">Recibirán por WhatsApp una liga para crear retos con premios y castigos divertidos entre ustedes.</p>
+                        </div>
+                    </div>
+                    <div class="bg-amber-900/10 border border-amber-500/20 rounded-lg p-3 flex items-start gap-2">
+                        <i class="fas fa-pill text-amber-400 mt-0.5"></i>
+                        <div>
+                            <p class="text-amber-300 text-[11px] font-bold uppercase">L-Carnitina: descuento solo en envío</p>
+                            <p class="text-gray-400 text-[10px] mt-0.5">El precio del producto ($38 por 2 frascos) no se descuenta. Pero si están en reto, el envío ($65) se divide entre las integrantes, así cada una paga menos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Pricing Plans Section -->
     <main class="max-w-4xl mx-auto px-4 pb-24 flex flex-col md:flex-row justify-center items-stretch gap-6 md:gap-8">
         
@@ -537,8 +678,19 @@
             <h3 class="mt-8 text-xl font-heading font-bold text-center text-white uppercase italic">Plan Nutrición</h3>
             <p class="text-center text-xs text-gray-500 uppercase tracking-wider mt-1">Mensual</p>
             <div class="text-center my-6 border-y border-gray-800 py-4">
+                <div id="nutri-original-row" class="hidden mb-1">
+                    <span class="text-gray-600 line-through text-lg">$<span id="display-price-nutri-original">39</span></span>
+                </div>
                 <span class="text-4xl font-bold text-infit-gold price-tag">$<span id="display-price-nutri">39</span></span>
                 <span class="text-sm text-gray-500 uppercase block mt-1">USD / Mes</span>
+                <div id="nutri-discount-badge" class="hidden mt-2">
+                    <span class="discount-badge text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        <i class="fas fa-tag mr-1"></i>Ahorras $<span id="nutri-savings">4</span> USD
+                    </span>
+                </div>
+                <p id="nutri-per-person-note" class="hidden text-[10px] text-infit-pink mt-2 font-bold uppercase tracking-wider">
+                    💲 Precio por integrante
+                </p>
             </div>
             <button onclick="playVideo('nutri')" class="w-full mb-4 py-2 bg-black hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
@@ -573,7 +725,7 @@
                 </div>
                 <p class="text-[10px] text-gray-500 mb-2">
                     <i class="fas fa-info-circle text-infit-cyan mr-1"></i>
-                    Potencia tus resultados. Presentación en pastillas. Se envía desde México.
+                    2 frascos · $19/frasco · Se envía desde México. <span id="lc-toggle-price-nutri" class="text-infit-cyan font-bold">$103 USD c/u</span>
                 </p>
                 <!-- Detalle L-Carnitina Mensual -->
                 <div class="lc-section" id="lc-detail-nutri">
@@ -583,8 +735,15 @@
                             <span class="text-xs font-bold text-infit-cyan">2 Frascos de L-Carnitina</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] text-gray-400">$<span id="lc-price-nutri">90</span> USD (incluye envío)</span>
+                            <span class="text-[10px] text-gray-400" id="lc-breakdown-nutri">$103 USD (incluye envío)</span>
                             <span class="text-[9px] text-infit-cyan bg-cyan-900/30 px-2 py-0.5 rounded-full">🇲🇽 Envío desde México</span>
+                        </div>
+                        <!-- Shipping division note (visible only when reto compartido is active) -->
+                        <div id="lc-shipping-note-nutri" class="hidden mt-1 bg-cyan-900/10 border border-cyan-500/20 rounded px-2 py-1">
+                            <p class="text-[9px] text-cyan-300">
+                                <i class="fas fa-truck mr-1"></i>
+                                <span id="lc-shipping-divided-nutri">Envío $65 ÷ 2 = $33 c/u</span>
+                            </p>
                         </div>
                         <div class="mt-2 bg-amber-900/20 border border-amber-500/30 rounded p-2">
                             <p class="text-[9px] text-amber-300">
@@ -615,12 +774,21 @@
                 <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Transformación Completa</p>
             </div>
             <div class="text-center my-6 border-y border-infit-pink/20 py-4">
-                <div class="flex justify-center items-center gap-3">
+                <div class="flex justify-center items-center gap-3 flex-wrap">
                     <span class="text-gray-600 line-through text-lg">$117</span>
+                    <span id="reto-original-row" class="hidden text-gray-500 line-through text-2xl">$<span id="display-price-reto-original">99</span></span>
                     <span class="text-5xl font-bold text-white price-tag">$<span id="display-price-reto">99</span></span>
                 </div>
                 <span class="text-sm text-infit-gold font-bold">USD Total</span>
-                <p class="text-[10px] text-gray-500 mt-1">Ahorras $18 vs. plan mensual</p>
+                <div id="reto-discount-badge" class="hidden mt-2">
+                    <span class="discount-badge text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        <i class="fas fa-tag mr-1"></i>Ahorras $<span id="reto-savings">10</span> USD con tu reto
+                    </span>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-1" id="reto-savings-text">Ahorras $18 vs. plan mensual</p>
+                <p id="reto3-per-person-note" class="hidden text-[10px] text-infit-pink mt-1 font-bold uppercase tracking-wider">
+                    💲 Precio por integrante
+                </p>
             </div>
             <button onclick="playVideo('reto')" class="w-full mb-4 py-2 bg-infit-pink/20 hover:bg-infit-pink/30 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
@@ -660,22 +828,25 @@
                 </div>
                 <p class="text-[10px] text-gray-500 mb-2">
                     <i class="fas fa-info-circle text-infit-cyan mr-1"></i>
-                    Potencia tus resultados. Presentación en pastillas. Se envía desde México.
+                    2 frascos · $19/frasco · Se envía desde México. <span id="lc-toggle-price-reto" class="text-infit-cyan font-bold">$103 USD c/u</span>
                 </p>
                 <!-- Detalle L-Carnitina Reto -->
                 <div class="lc-section" id="lc-detail-reto">
                     <div class="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3">
-                        <div class="flex items-center gap-2 mb-1">
+                        <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-capsules text-infit-cyan"></i>
                             <span class="text-xs font-bold text-infit-cyan">2 Frascos de L-Carnitina</span>
                         </div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="lc-free-badge text-[9px] text-white font-bold px-2 py-0.5 rounded-full">+1 GRATIS</span>
-                            <span class="text-[10px] text-gray-400">= 3 frascos en total</span>
-                        </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] text-gray-400">$<span id="lc-price-reto">90</span> USD (incluye envío)</span>
+                            <span class="text-[10px] text-gray-400" id="lc-breakdown-reto">$103 USD (incluye envío)</span>
                             <span class="text-[9px] text-infit-cyan bg-cyan-900/30 px-2 py-0.5 rounded-full">🇲🇽 Envío desde México</span>
+                        </div>
+                        <!-- Shipping division note (visible only when reto compartido is active) -->
+                        <div id="lc-shipping-note-reto" class="hidden mt-1 bg-cyan-900/10 border border-cyan-500/20 rounded px-2 py-1">
+                            <p class="text-[9px] text-cyan-300">
+                                <i class="fas fa-truck mr-1"></i>
+                                <span id="lc-shipping-divided-reto">Envío $65 ÷ 2 = $33 c/u</span>
+                            </p>
                         </div>
                         <div class="mt-2 bg-amber-900/20 border border-amber-500/30 rounded p-2">
                             <p class="text-[9px] text-amber-300">
@@ -811,6 +982,24 @@
                     </div>
                 </div>
 
+                <!-- Resumen Reto Compartido en Modal -->
+                <div id="modal-reto-summary" class="hidden bg-pink-900/15 border border-pink-500/20 p-3 rounded-lg mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-users text-infit-pink"></i>
+                            <div>
+                                <p class="text-[10px] text-infit-pink uppercase font-bold">👯‍♀️ Reto Compartido</p>
+                                <p id="modal-reto-desc" class="text-white text-xs font-bold">2 integrantes - 10% descuento</p>
+                                <p class="text-[9px] text-infit-pink/80 mt-0.5">💲 Precio por integrante</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p id="modal-reto-savings" class="text-green-400 font-bold text-sm">-$10</p>
+                            <p class="text-[9px] text-gray-500">Ahorro c/u</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- L-Carnitina Summary in Modal -->
                 <div id="modal-lc-summary" class="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3 mb-4 hidden">
                     <div class="flex items-center gap-2 mb-1">
@@ -819,7 +1008,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] text-gray-400" id="modal-lc-detail">2 frascos</span>
-                        <span class="text-xs font-bold text-infit-cyan">$<span id="modal-lc-price">90</span> USD</span>
+                        <span class="text-xs font-bold text-infit-cyan">$<span id="modal-lc-price">103</span> USD</span>
                     </div>
                     <div class="mt-1">
                         <span class="text-[9px] text-gray-500">🇲🇽 Incluye envío desde México</span>
@@ -836,11 +1025,11 @@
                         </div>
                         <div class="flex justify-between text-[11px]">
                             <span class="text-gray-400">L-Carnitina (incluye envío)</span>
-                            <span class="text-infit-cyan" id="breakdown-lc-price">$90 USD</span>
+                            <span class="text-infit-cyan" id="breakdown-lc-price">$103 USD</span>
                         </div>
                         <div class="border-t border-gray-700 pt-1 mt-1 flex justify-between text-xs font-bold">
                             <span class="text-white">Total</span>
-                            <span class="text-infit-gold" id="breakdown-total">$129 USD</span>
+                            <span class="text-infit-gold" id="breakdown-total">$142 USD</span>
                         </div>
                     </div>
                     <div id="breakdown-payment-note" class="mt-2 bg-amber-900/20 border border-amber-500/30 rounded p-2 hidden">
@@ -1234,9 +1423,13 @@
             promoText: "Garantía Total: Paga hasta recibir tu plan. Precios especiales para nuestra comunidad en USA.",
             priceNutri: 39,
             priceReto: 99,
-            priceLcarnitina: 90,
+            // L-Carnitina pricing breakdown
+            lcPricePerFrasco: 19,        // $19 per frasco
+            lcFrascosPerPerson: 2,       // Always 2 frascos per person
+            lcShippingTotal: 65,         // $65 shipping total (divided by participantes)
+            priceLcarnitina: 90,         // Solo base price (kept for editor compatibility)
             lcFrascosMensual: 2,
-            lcFrascosReto: 3, // 2 + 1 de regalo
+            lcFrascosReto: 2,            // Always 2 frascos (no +1 free in USA)
             retoNote: "*Pagas hasta que te entreguemos todo tu material.*"
         };
         
@@ -1247,6 +1440,138 @@
             nutri: false,
             reto: false
         };
+
+        // =============================================
+        // ESTADO DE RETO COMPARTIDO
+        // =============================================
+        let retoParticipantes = 0; // 0 = yo sola, 2, 3, o 4 integrantes
+
+        function getDiscountRate(participants) {
+            if (participants === 2) return 0.10;
+            if (participants === 3) return 0.15;
+            if (participants === 4) return 0.20;
+            return 0;
+        }
+
+        function getDiscountedPrice(basePrice, participants) {
+            const rate = getDiscountRate(participants);
+            return Math.round(basePrice * (1 - rate));
+        }
+
+        // L-Carnitina per-person price calculation
+        // Product cost is fixed (2 frascos × $19 = $38 per person)
+        // Shipping $65 is divided among participants
+        function getLcarnitinaPerPerson(participants) {
+            const numPeople = participants >= 2 ? participants : 1;
+            const productCost = config.lcFrascosPerPerson * config.lcPricePerFrasco;
+            const shippingPerPerson = config.lcShippingTotal / numPeople;
+            const totalPerPerson = productCost + shippingPerPerson;
+            // Round to nearest integer for display
+            return Math.round(totalPerPerson);
+        }
+
+        // L-Carnitina price breakdown text for display
+        function getLcPriceBreakdownText(participants) {
+            const numPeople = participants >= 2 ? participants : 1;
+            const productCost = config.lcFrascosPerPerson * config.lcPricePerFrasco;
+            const shippingPerPerson = Math.round(config.lcShippingTotal / numPeople);
+            const totalPerPerson = getLcarnitinaPerPerson(participants);
+            if (numPeople >= 2) {
+                return `2 frascos × $${config.lcPricePerFrasco} = $${productCost} + envío $${config.lcShippingTotal}/${numPeople} = $${shippingPerPerson} · Total: $${totalPerPerson} USD`;
+            } else {
+                return `2 frascos × $${config.lcPricePerFrasco} = $${productCost} + envío $${config.lcShippingTotal} · Total: $${totalPerPerson} USD`;
+            }
+        }
+
+        function selectParticipantes(num) {
+            retoParticipantes = num;
+            document.querySelectorAll('.reto-option').forEach(btn => {
+                if (parseInt(btn.dataset.participants) === num) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            updatePricingDisplay();
+        }
+
+        function updatePricingDisplay() {
+            const rate = getDiscountRate(retoParticipantes);
+            const nutriDiscounted = getDiscountedPrice(config.priceNutri, retoParticipantes);
+            const retoDiscounted = getDiscountedPrice(config.priceReto, retoParticipantes);
+
+            // Nota "precio por integrante" (general + por plan) — visible solo en reto
+            const priceInfoNote = document.getElementById('reto-price-info-note');
+            const nutriPerPerson = document.getElementById('nutri-per-person-note');
+            const reto3PerPerson = document.getElementById('reto3-per-person-note');
+            if (rate > 0) {
+                priceInfoNote.classList.remove('hidden');
+                nutriPerPerson.classList.remove('hidden');
+                reto3PerPerson.classList.remove('hidden');
+            } else {
+                priceInfoNote.classList.add('hidden');
+                nutriPerPerson.classList.add('hidden');
+                reto3PerPerson.classList.add('hidden');
+            }
+
+            // Plan Nutrición Mensual
+            document.getElementById('display-price-nutri').textContent = nutriDiscounted;
+            const nutriOrigRow = document.getElementById('nutri-original-row');
+            const nutriBadge = document.getElementById('nutri-discount-badge');
+            if (rate > 0) {
+                nutriOrigRow.classList.remove('hidden');
+                document.getElementById('display-price-nutri-original').textContent = config.priceNutri;
+                nutriBadge.classList.remove('hidden');
+                document.getElementById('nutri-savings').textContent = config.priceNutri - nutriDiscounted;
+            } else {
+                nutriOrigRow.classList.add('hidden');
+                nutriBadge.classList.add('hidden');
+            }
+
+            // Plan Reto 3 Meses
+            document.getElementById('display-price-reto').textContent = retoDiscounted;
+            const retoOrigRow = document.getElementById('reto-original-row');
+            const retoBadge = document.getElementById('reto-discount-badge');
+            const retoSavingsText = document.getElementById('reto-savings-text');
+            if (rate > 0) {
+                retoOrigRow.classList.remove('hidden');
+                document.getElementById('display-price-reto-original').textContent = config.priceReto;
+                retoBadge.classList.remove('hidden');
+                document.getElementById('reto-savings').textContent = config.priceReto - retoDiscounted;
+                const monthlySavings = 117 - config.priceReto;
+                const retoSavings = config.priceReto - retoDiscounted;
+                retoSavingsText.textContent = `Ahorras $${monthlySavings + retoSavings} vs. plan mensual (incluye ${Math.round(rate * 100)}% reto)`;
+            } else {
+                retoOrigRow.classList.add('hidden');
+                retoBadge.classList.add('hidden');
+                const monthlySavings = 117 - config.priceReto;
+                retoSavingsText.textContent = `Ahorras $${monthlySavings} vs. plan mensual`;
+            }
+
+            // L-Carnitina prices update based on reto participantes
+            const lcPricePerPersonNow = getLcarnitinaPerPerson(retoParticipantes);
+            const lcBreakdownText = getLcPriceBreakdownText(retoParticipantes);
+            document.getElementById('lc-breakdown-nutri').textContent = lcBreakdownText;
+            document.getElementById('lc-breakdown-reto').textContent = lcBreakdownText;
+            
+            // Show shipping division note in L-Carnitina cards when in reto mode
+            const lcShippingNoteNutri = document.getElementById('lc-shipping-note-nutri');
+            const lcShippingNoteReto = document.getElementById('lc-shipping-note-reto');
+            const numPeople = retoParticipantes >= 2 ? retoParticipantes : 1;
+            if (numPeople >= 2) {
+                lcShippingNoteNutri.classList.remove('hidden');
+                lcShippingNoteReto.classList.remove('hidden');
+                document.getElementById('lc-shipping-divided-nutri').textContent = `Envío $${config.lcShippingTotal} ÷ ${numPeople} = $${Math.round(config.lcShippingTotal / numPeople)} c/u`;
+                document.getElementById('lc-shipping-divided-reto').textContent = `Envío $${config.lcShippingTotal} ÷ ${numPeople} = $${Math.round(config.lcShippingTotal / numPeople)} c/u`;
+            } else {
+                lcShippingNoteNutri.classList.add('hidden');
+                lcShippingNoteReto.classList.add('hidden');
+            }
+            
+            // Update L-Carnitina toggle price labels on both cards
+            document.getElementById('lc-toggle-price-nutri').textContent = `$${lcPricePerPersonNow} USD c/u`;
+            document.getElementById('lc-toggle-price-reto').textContent = `$${lcPricePerPersonNow} USD c/u`;
+        }
 
         // =============================================
         // FIREBASE
@@ -1456,8 +1781,11 @@
             document.getElementById('edit-reto-note').value = config.retoNote;
             
             // Actualizar precios L-Carnitina en las tarjetas
-            document.getElementById('lc-price-nutri').textContent = config.priceLcarnitina;
-            document.getElementById('lc-price-reto').textContent = config.priceLcarnitina;
+            // L-Carnitina prices are now calculated dynamically via updatePricingDisplay()
+            // No need to set static prices here
+            
+            // Aplicar descuentos de reto compartido (L-carnitina NO se descuenta)
+            updatePricingDisplay();
         }
 
         function updateContent() {
@@ -1494,20 +1822,47 @@
         // PLAN SELECTION & MODAL
         // =============================================
         function selectPlan(planName) {
-            let price = 0;
+            let basePrice = 0;
+            let discountedPrice = 0;
             let planType = '';
+
             if (planName === 'Nutrición Mensual') {
-                price = config.priceNutri;
+                basePrice = config.priceNutri;
+                discountedPrice = getDiscountedPrice(config.priceNutri, retoParticipantes);
                 planType = 'nutri';
             } else if (planName === 'Reto 3 Meses') {
-                price = config.priceReto;
+                basePrice = config.priceReto;
+                discountedPrice = getDiscountedPrice(config.priceReto, retoParticipantes);
                 planType = 'reto';
             }
-            selectedPlan = { name: planName, price: price, type: planType };
+
+            const discountAmount = basePrice - discountedPrice;
+            selectedPlan = {
+                name: planName,
+                price: discountedPrice,
+                basePrice: basePrice,
+                discountAmount: discountAmount,
+                type: planType,
+                participantes: retoParticipantes
+            };
+            
             document.getElementById('modal-plan-name').textContent = planName;
-            document.getElementById('modal-plan-price').textContent = `$${price}`;
+            document.getElementById('modal-plan-price').textContent = `$${discountedPrice}`;
+            
+            // Gestionar resumen de Reto Compartido en el modal
+            const retoSummary = document.getElementById('modal-reto-summary');
+            if (retoParticipantes >= 2) {
+                retoSummary.classList.remove('hidden');
+                const discountPct = Math.round(getDiscountRate(retoParticipantes) * 100);
+                document.getElementById('modal-reto-desc').textContent = `${retoParticipantes} integrantes - ${discountPct}% descuento`;
+                document.getElementById('modal-reto-savings').textContent = `-$${discountAmount}`;
+            } else {
+                retoSummary.classList.add('hidden');
+            }
             
             // Actualizar condición de pago y L-Carnitina en modal
+            // L-Carnitina price per person (dynamic based on reto)
+            const lcPricePerPerson = getLcarnitinaPerPerson(retoParticipantes);
             updateModalPayment(planType);
             
             // Siempre mostrar campos de nutrición
@@ -1534,20 +1889,19 @@
             if (hasLc) {
                 // Mostrar resumen L-Carnitina
                 lcSummary.classList.remove('hidden');
-                const frascos = planType === 'nutri' ? config.lcFrascosMensual : config.lcFrascosReto;
-                const frascosLabel = planType === 'reto' 
-                    ? `${frascos} frascos (2 + 1 de regalo)` 
-                    : `${frascos} frascos`;
+                const frascos = config.lcFrascosPerPerson; // Always 2 frascos per person
+                const frascosLabel = `${frascos} frascos`;
                 document.getElementById('modal-lc-title').textContent = `+ L-Carnitina (${frascosLabel})`;
                 document.getElementById('modal-lc-detail').textContent = `${frascosLabel} · Presentación en pastillas`;
-                document.getElementById('modal-lc-price').textContent = config.priceLcarnitina;
+                const lcPriceNow = getLcarnitinaPerPerson(retoParticipantes);
+                document.getElementById('modal-lc-price').textContent = lcPriceNow;
                 
                 // Mostrar desglose de precio
                 priceBreakdown.classList.remove('hidden');
                 document.getElementById('breakdown-plan-label').textContent = selectedPlan.name;
                 document.getElementById('breakdown-plan-price').textContent = `$${selectedPlan.price} USD`;
-                document.getElementById('breakdown-lc-price').textContent = `$${config.priceLcarnitina} USD`;
-                const total = selectedPlan.price + config.priceLcarnitina;
+                document.getElementById('breakdown-lc-price').textContent = `$${lcPriceNow} USD`;
+                const total = selectedPlan.price + lcPriceNow;
                 document.getElementById('breakdown-total').textContent = `$${total} USD`;
                 
                 // Mostrar nota de pago anticipado en desglose
@@ -1569,10 +1923,21 @@
                 methodNote.innerHTML = '<i class="fas fa-info-circle text-amber-400"></i> <span class="text-amber-300">Pago anticipado requerido</span> para procesar el envío de L-Carnitina desde México.';
                 
             } else {
-                // Sin L-Carnitina - comportamiento original
+                // Sin L-Carnitina
                 lcSummary.classList.add('hidden');
-                priceBreakdown.classList.add('hidden');
                 document.getElementById('breakdown-payment-note').classList.add('hidden');
+                
+                // Si hay reto compartido pero no L-Carnitina: mostrar desglose con info del descuento
+                if (retoParticipantes >= 2) {
+                    priceBreakdown.classList.remove('hidden');
+                    const discountPct = Math.round(getDiscountRate(retoParticipantes) * 100);
+                    document.getElementById('breakdown-plan-label').textContent = `${selectedPlan.name} (${discountPct}% descuento)`;
+                    document.getElementById('breakdown-plan-price').textContent = `$${selectedPlan.price} USD`;
+                    document.getElementById('breakdown-lc-price').textContent = '—';
+                    document.getElementById('breakdown-total').textContent = `$${selectedPlan.price} USD`;
+                } else {
+                    priceBreakdown.classList.add('hidden');
+                }
                 
                 paymentCondition.textContent = 'USD - A pagar al recibir';
                 footerNote.innerHTML = '<i class="fas fa-lock text-infit-gold"></i> Pagarás hasta que recibas tu material.';
@@ -1622,7 +1987,7 @@
             
             const planType = selectedPlan.type;
             const hasLc = lcarnitinaState[planType];
-            const frascos = planType === 'nutri' ? config.lcFrascosMensual : config.lcFrascosReto;
+            const frascos = config.lcFrascosPerPerson; // Always 2 frascos per person
             
             const formData = {
                 name: document.getElementById('client-name').value,
@@ -1630,17 +1995,29 @@
                 origin: document.getElementById('client-origin').value || 'No especificado',
                 plan: selectedPlan.name,
                 price: selectedPlan.price,
+                basePrice: selectedPlan.basePrice,
+                discountAmount: selectedPlan.discountAmount,
+                participantes: retoParticipantes,
                 currency: 'USD',
                 region: 'USA',
                 gender: 'F',
                 affiliate: finalReferrer,
                 lcarnitina: hasLc,
                 lcarnitinaFrascos: hasLc ? frascos : 0,
-                lcarnitinaPrice: hasLc ? config.priceLcarnitina : 0,
-                totalPrice: hasLc ? selectedPlan.price + config.priceLcarnitina : selectedPlan.price,
+                lcarnitinaPrice: hasLc ? getLcarnitinaPerPerson(retoParticipantes) : 0,
+                lcarnitinaProductCost: hasLc ? config.lcFrascosPerPerson * config.lcPricePerFrasco : 0,
+                lcarnitinaShippingPerPerson: hasLc ? Math.round(config.lcShippingTotal / (retoParticipantes >= 2 ? retoParticipantes : 1)) : 0,
+                totalPrice: hasLc ? selectedPlan.price + getLcarnitinaPerPerson(retoParticipantes) : selectedPlan.price,
                 paymentCondition: hasLc ? 'Anticipado (L-Carnitina)' : 'Al recibir',
                 timestamp: new Date().toISOString()
             };
+            
+            // Reto Compartido info for WhatsApp
+            let retoInfoText = "";
+            if (retoParticipantes >= 2) {
+                const discountPct = Math.round(getDiscountRate(retoParticipantes) * 100);
+                retoInfoText += `%0A%0A👯‍♀️ *RETO COMPARTIDO*%0A• ${retoParticipantes} integrantes%0A• Descuento: ${discountPct}% aplicado al plan%0A• Ahorro por persona: $${selectedPlan.discountAmount} USD%0A• 📲 Herramienta digital de retos (premios y castigos) incluida`;
+            }
             
             let detailsText = "";
             let unitLabelW = 'lb';
@@ -1648,10 +2025,18 @@
             
             // Sección de L-Carnitina en WhatsApp
             if (hasLc) {
-                const frascosLabel = planType === 'reto' 
-                    ? `${frascos} frascos (2 + 1 de regalo)` 
-                    : `${frascos} frascos`;
-                detailsText += `%0A💊 *L-CARNITINA*%0A• ${frascosLabel} · Presentación en pastillas%0A• $${config.priceLcarnitina} USD (incluye envío desde México)`;
+                const lcPerPerson = getLcarnitinaPerPerson(retoParticipantes);
+                const numPeople = retoParticipantes >= 2 ? retoParticipantes : 1;
+                const productCost = config.lcFrascosPerPerson * config.lcPricePerFrasco;
+                const shippingPerPerson = Math.round(config.lcShippingTotal / numPeople);
+                let lcDetail = `%0A💊 *L-CARNITINA*%0A• ${frascos} frascos · Presentación en pastillas`;
+                if (numPeople >= 2) {
+                    lcDetail += `%0A• Producto: $${productCost} + Envío: $${config.lcShippingTotal} ÷ ${numPeople} = $${shippingPerPerson} c/u`;
+                } else {
+                    lcDetail += `%0A• Producto: $${productCost} + Envío: $${config.lcShippingTotal}`;
+                }
+                lcDetail += `%0A• Total por persona: *$${lcPerPerson} USD*`;
+                detailsText += lcDetail;
             }
             
             // Capturar el objetivo seleccionado
@@ -1723,15 +2108,15 @@
                 : `de ${formData.city}`;
             
             // Header con precio
+            const retoBadgeText = retoParticipantes >= 2 ? ` 👯‍♀️ (Reto ${retoParticipantes})` : '';
             let headerText = '';
             if (hasLc) {
-                const total = selectedPlan.price + config.priceLcarnitina;
-                const frascosLabel = planType === 'reto' 
-                    ? `${frascos} frascos (2+1 regalo)` 
-                    : `${frascos} frascos`;
-                headerText = `Hola INFIT! 🇺🇸 Soy *${formData.name}* (${locationText}).%0A%0A✨ Me interesa el *${formData.plan}* + *L-Carnitina (${frascosLabel})*.%0A💰 Plan: $${selectedPlan.price} USD + L-Carnitina: $${config.priceLcarnitina} USD = *$${total} USD total*.`;
+                const lcPerPersonNow = getLcarnitinaPerPerson(retoParticipantes);
+                const total = selectedPlan.price + lcPerPersonNow;
+                const frascosLabel = `${frascos} frascos`;
+                headerText = `Hola INFIT! 🇺🇸 Soy *${formData.name}* (${locationText}).%0A%0A✨ Me interesa el *${formData.plan}* + *L-Carnitina (${frascosLabel})*${retoBadgeText}.%0A💰 Plan: $${selectedPlan.price} USD + L-Carnitina: $${lcPerPersonNow} USD = *$${total} USD total*.`;
             } else {
-                headerText = `Hola INFIT! 🇺🇸 Soy *${formData.name}* (${locationText}).%0A%0A✨ Me interesa el *${formData.plan}* (Precio: $${selectedPlan.price} USD).`;
+                headerText = `Hola INFIT! 🇺🇸 Soy *${formData.name}* (${locationText}).%0A%0A✨ Me interesa el *${formData.plan}* (Precio: $${selectedPlan.price} USD)${retoBadgeText}.`;
             }
             
             const refText = finalReferrer !== 'Local/Orgánico' ? `%0A%0A🤝 *Vengo recomendada por:* ${finalReferrer}` : '';
@@ -1745,7 +2130,7 @@
             }
             
             const motivation = `%0A%0A✨ *¡Lista para mi mejor Versión!*`;
-            const fullText = `${headerText}${detailsText}${refText}${paymentCondition}${motivation}`;
+            const fullText = `${headerText}${retoInfoText}${detailsText}${refText}${paymentCondition}${motivation}`;
             const waLink = `https://wa.me/${phone}?text=${fullText}`;
             
             window.open(waLink, '_blank');
